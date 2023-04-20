@@ -33,7 +33,13 @@ public class UTM {
      * 5-Tupel: startZustand, eingabe, endZustand, ausgabe, richtung
      */
     private void convertInputToConfiguration() {
-        String[] uebergange = input.split("11");
+        String[] code = input.split("111");
+
+        for (int i = 0; i < code[1].length(); i++) {
+            band[kopfPosition + i] = String.valueOf(code[1].charAt(i));
+        }
+
+        String[] uebergange = code[0].split("11");
 
         for (String s : uebergange) {
             String[] uebergang = s.split("1");
@@ -147,6 +153,6 @@ public class UTM {
     /**
      * Test cases
      */
-    //010010001010011000101010010110001001001010011000100010001010
-    //1010010100100110101000101001100010010100100110001010010100
+    //010010001010011000101010010110001001001010011000100010001010 (ohne input)
+    //1010010100100110101000101001100010010100100110001010010100 (ohne input)
 }
