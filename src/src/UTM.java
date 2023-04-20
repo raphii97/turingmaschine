@@ -1,13 +1,15 @@
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Scanner;
 
 public class UTM {
-    private String band = "";
-    private String[] bandSymbol = {null, "0", "1", " "};
-    private int kopfPosition = 0;
+    private String[] band = new String[200];
+    private final String[] bandSymbol = {null, "0", "1", " "};
+    private int kopfPosition = 99; //half of the band
     private int currentZustand = 1;
     private String input;
-    private HashMap<Integer, Zustand> zustaende = new HashMap<Integer, Zustand>();
+    private HashMap<Integer, Zustand> zustaende = new HashMap();
+    private int counter = 0;
 
     /**
      * Gets the input from the user
@@ -45,6 +47,9 @@ public class UTM {
             int ausgabe = uebergang[3].length();
             Uebergang.Richtung richtung = Uebergang.Richtung.getRichtung(uebergang[4].length());
 
+            if (zustaende.get(startZustand) == null) zustaende.put(startZustand, new Zustand(startZustand));
+            if (zustaende.get(endZustand) == null) zustaende.put(endZustand, new Zustand(endZustand));
+
             zustaende.get(startZustand).uebergaenge.add(new Uebergang(startZustand, endZustand, eingabe, ausgabe, richtung));
         }
     }
@@ -52,22 +57,22 @@ public class UTM {
     /**
      * Runs the UTM
      */
-    private boolean step(Modus step) {
+    private boolean step(Modus stepMode) {
         Zustand zustand = zustaende.get(currentZustand);
-        String eingabe = bandSymbol[kopfPosition];
+        String eingabe = band[kopfPosition];
         boolean continueRunning = false;
 
         for (Uebergang uebergang : zustand.uebergaenge) {
             if (bandSymbol[uebergang.eingabe].equals(eingabe)) {
+                counter++;
                 continueRunning = true;
-                bandSymbol[kopfPosition] = String.valueOf(uebergang.ausgabe);
+                band[kopfPosition] = bandSymbol[uebergang.ausgabe];
                 currentZustand = uebergang.endZustand;
                 kopfPosition += uebergang.richtung.move();
+                if (stepMode.getModus()) print();
                 break;
             }
         }
-
-        if (step.getModus()) print();
 
         return continueRunning;
     }
@@ -76,20 +81,41 @@ public class UTM {
      * Prints the band
      */
     private void print(){
-        System.out.println(band);
+        int startBand = kopfPosition - 15;
+        int endBand = kopfPosition + 15;
+
+        System.out.println("Zustand: " + currentZustand);
+
+        String output = "";
+        for (int i = startBand; i < endBand; i++) {
+            output += "| " + band[i] + " ";
+        }
+        output += "|";
+
+        System.out.println("-".repeat(output.length()));
+        System.out.println(output);
+        System.out.println("-".repeat(output.length()));
+
+        System.out.println("Kopfposition: " + kopfPosition);
+
+        System.out.println("Berechnungen: " + counter);
+        System.out.println();
     }
 
     /**
      * Starts the UTM
      */
-    public void start(Modus step) {
+    public void start(Modus stepMode) {
+        Arrays.fill(band, " ");
+
         do {
             getInput();
         } while (!validateInput());
 
         convertInputToConfiguration();
+        print();
 
-        while (step(step));
+        while (step(stepMode));
     }
 
     /**
@@ -99,7 +125,7 @@ public class UTM {
         STEP(true),
         LAUF(false);
 
-        private boolean modus;
+        private final boolean modus;
 
         Modus(boolean modus) {
             this.modus = modus;
@@ -117,4 +143,10 @@ public class UTM {
     public static void main(String[] args) {
         new UTM().start(Modus.STEP);
     }
+
+    /**
+     * Test cases
+     */
+    //010010001010011000101010010110001001001010011000100010001010
+    //1010010100100110101000101001100010010100100110001010010100
 }
