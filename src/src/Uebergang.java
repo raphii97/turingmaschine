@@ -5,7 +5,7 @@ public class Uebergang {
     int ausgabe;
     Richtung richtung;
 
-    public Uebergang(int startZustand, int endZustand, int eingabe, int ausgabe, Richtung richtung) {
+    public Uebergang(int startZustand, int endZustand, int eingabe, int ausgabe, Richtung richtung) {//Todo: vielleicht Reihenfolge wie bei Übergangsfunktion?
         this.startZustand = startZustand;
         this.endZustand = endZustand;
         this.eingabe = eingabe;
@@ -30,9 +30,9 @@ public class Uebergang {
         }
 
         public static Richtung getRichtung(int value) {
-            for (Richtung r : Richtung.values()) {
-                if (r.getValue() == value) {
-                    return r;
+            for (Richtung richtung : Richtung.values()) {
+                if (richtung.getValue() == value) {
+                    return richtung;
                 }
             }
             return null;

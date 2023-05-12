@@ -4,11 +4,11 @@ import java.util.Scanner;
 
 public class UTM {
     private String[] band = new String[500];
-    private final String[] bandSymbol = {null, "0", "1", " ", "x", "y", "z"};
+    private final String[] bandSymbole = {null, "0", "1", " ", "x", "y", "z"};
     private int kopfPosition = 50; // mehr als 15 aber weniger als hälfte der bandlänge, damit grosse zahlen auch funktionieren
-    private int currentZustand = 1;
+    private int momentanerZustand = 1;
     private String input;
-    private HashMap<Integer, Zustand> zustaende = new HashMap();
+    private HashMap<Integer, Zustand> zustaende = new HashMap(); //Todo: Die Zustandsnummer führt zu dem Zustand?
     private int counter = 0;
 
     /**
@@ -26,61 +26,61 @@ public class UTM {
      */
     private boolean validateInput() {
         return input.matches("[01]+");
-    }
+    }//Todo:sollte leerer String auch akzeptiert werden oder nicht?
 
     /**
      * Converts the input to a configuration
      * 5-Tupel: startZustand, eingabe, endZustand, ausgabe, richtung
      */
     private void convertInputToConfiguration() {
-        //split user input into TM configuration and TM input
+        //split user input into Turing Machine configuration and Turing Machine input
         String[] code = input.split("111");
 
-        //fill band with TM input
+        //fill band with Turing Machine input
         for (int i = 0; i < code[1].length(); i++) {
             band[kopfPosition + i] = String.valueOf(code[1].charAt(i));
         }
 
-        //get TM configurations
-        String[] uebergange = code[0].split("11");
+        //get TM configurations //Todo: mit configurations sind hier transmissions gemeint?
+        String[] uebergaenge = code[0].split("11");
 
         //add all Configurations to the HashMap Zustaende
-        for (String s : uebergange) {
-            String[] uebergang = s.split("1");
+        for (String uebergang : uebergaenge) {
+            String[] uebergangsfunktionsTeile = uebergang.split("1");
 
             //has to be a 5-tupel
-            if (uebergang.length != 5) {
+            if (uebergangsfunktionsTeile.length != 5) {
                 System.out.println("Invalid input");
                 return;
             }
 
-            int startZustand = uebergang[0].length();
-            int eingabe = uebergang[1].length();
-            int endZustand = uebergang[2].length();
-            int ausgabe = uebergang[3].length();
-            Uebergang.Richtung richtung = Uebergang.Richtung.getRichtung(uebergang[4].length());
+            int startZustand = uebergangsfunktionsTeile[0].length();
+            int eingelesen = uebergangsfunktionsTeile[1].length();
+            int endZustand = uebergangsfunktionsTeile[2].length();
+            int neuGeschrieben = uebergangsfunktionsTeile[3].length();
+            Uebergang.Richtung richtung = Uebergang.Richtung.getRichtung(uebergangsfunktionsTeile[4].length());
 
             if (zustaende.get(startZustand) == null) zustaende.put(startZustand, new Zustand(startZustand));
             if (zustaende.get(endZustand) == null) zustaende.put(endZustand, new Zustand(endZustand));
 
-            zustaende.get(startZustand).uebergaenge.add(new Uebergang(startZustand, endZustand, eingabe, ausgabe, richtung));
+            zustaende.get(startZustand).uebergaenge.add(new Uebergang(startZustand, endZustand, eingelesen, neuGeschrieben, richtung)); //Todo:fügt jedem Zustand alle Übergänge hinzu?
         }
     }
 
     /**
-     * Runs the UTM
+     * Runs the Universal Turing Machine
      */
     private boolean step(Modus stepMode) {
-        Zustand zustand = zustaende.get(currentZustand);
+        Zustand zustand = zustaende.get(momentanerZustand);
         String eingabe = band[kopfPosition];
         boolean continueRunning = false;
 
         for (Uebergang uebergang : zustand.uebergaenge) {
-            if (bandSymbol[uebergang.eingabe].equals(eingabe)) {
+            if (bandSymbole[uebergang.eingabe].equals(eingabe)) {
                 counter++;
                 continueRunning = true;
-                band[kopfPosition] = bandSymbol[uebergang.ausgabe];
-                currentZustand = uebergang.endZustand;
+                band[kopfPosition] = bandSymbole[uebergang.ausgabe];
+                momentanerZustand = uebergang.endZustand;
                 kopfPosition += uebergang.richtung.move();
                 if (stepMode.getModus()) print();
                 break;
@@ -101,7 +101,7 @@ public class UTM {
         int startBand = kopfPosition - 15;
         int endBand = kopfPosition + 16;
 
-        System.out.println("Zustand: " + currentZustand);
+        System.out.println("Zustand: " + momentanerZustand);
 
         String output = "";
         for (int i = startBand; i < endBand; i++) {
@@ -121,9 +121,9 @@ public class UTM {
     }
 
     /**
-     * Starts the UTM
+     * Starts the Universal Turing Machine
      */
-    public void start(Modus stepMode) {
+    private void start(Modus stepMode) {
         Arrays.fill(band, " ");
 
         do {
