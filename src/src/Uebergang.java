@@ -1,15 +1,15 @@
 public class Uebergang {
     int startZustand;
     int endZustand;
-    int eingabe;
-    int ausgabe;
+    int eingelesen;
+    int geschrieben;
     Richtung richtung;
 
-    public Uebergang(int startZustand, int endZustand, int eingabe, int ausgabe, Richtung richtung) {//Todo: vielleicht Reihenfolge wie bei Übergangsfunktion?
+    public Uebergang(int startZustand, int endZustand, int eingelesen, int geschrieben, Richtung richtung) {//Todo: vielleicht Reihenfolge wie bei Übergangsfunktion?
         this.startZustand = startZustand;
         this.endZustand = endZustand;
-        this.eingabe = eingabe;
-        this.ausgabe = ausgabe;
+        this.eingelesen = eingelesen;
+        this.geschrieben = geschrieben;
         this.richtung = richtung;
     }
 
