@@ -8,7 +8,4 @@ public class Zustand {
         this.index = index;
     }
 
-    public int getIndex() {
-        return index;
-    }
 }
