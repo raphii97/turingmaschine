@@ -41,6 +41,15 @@ public class UniverselleTuringmaschine {
         //split user input into Turing Machine configuration and Turing Machine input
         String[] turingMachineAndInput = turingMachineInBinary.split("111");
 
+        //split user input into TM configuration and TM input
+        String[] turingMachineAndInput = new String[2];
+        if (turingMachineInBinary.contains("111")) {
+            turingMachineAndInput = turingMachineInBinary.split("111");
+        } else {
+            turingMachineAndInput[0] = "010100100001001101001000000010001001100101001010011001001000100100110001010000100001001100010010000001001011000010100001010011000010010000100100110000100010000010101100000101000001010110000010010000010010110000010000100010100110000001010000001010110000001001000000100101100000010000101000100110000000101000000010001001100000001001000000001000100";
+            turingMachineAndInput[1] = input;
+        }
+
         //fill band with Turing Machine input
         fillBandWith(turingMachineAndInput[1]);
 
@@ -144,10 +153,11 @@ public class UniverselleTuringmaschine {
         } while (!validateInput());//ist Input nur 0en und 1en
 
         setUpTuringMachineBasedOnBinaryInput();
-        printBandAroundHead();
+        if (stepMode.getModus()) printBandAroundHead();
 
         while (calculationStep(stepMode));
 
+        if (!stepMode.getModus()) printBandAroundHead();
         System.out.println("Ergebnis: " + (Arrays.toString(band)).replaceAll("[^0]", "").length());//Am Schluss werden alle nicht Null-Zeichen vom Band entfernt und die String-Länge genommen, welch gleich der Anzahl Nullen sein sollte, dies gibt einem die Dezimal Repräsentation der Zahl
     }
 
