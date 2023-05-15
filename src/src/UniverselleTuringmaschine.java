@@ -59,7 +59,7 @@ public class UniverselleTuringmaschine {
             int endZustand = uebergangsfunktionsTeile[2].length();//in decimal übersetzt
             int neuGeschrieben = uebergangsfunktionsTeile[3].length();// holt decimal Repräsentation des Zeichens
             Uebergang.Richtung richtung = Uebergang.Richtung.getRichtung(uebergangsfunktionsTeile[4].length());// Anzahl Nullen in Integer übersetzt
-
+            //neue Zustände werden initialisiert
             if (zustaende.get(startZustand) == null) zustaende.put(startZustand, new Zustand(startZustand));
             if (zustaende.get(endZustand) == null) zustaende.put(endZustand, new Zustand(endZustand));//Falls ein Zustand keine Übergänge mehr hat, wird er sonst nicht initialisiert
 
