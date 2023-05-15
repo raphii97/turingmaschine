@@ -16,7 +16,7 @@ public class UniverselleTuringmaschine {
      * Gets the whole binary encoded Turing Machine from the user
      */
     private void getTuringMachineInBinaryFormInput() {
-        System.out.println("Enter a binary string: ");
+        System.out.println("Enter a unary coded string or decimal values: (e.g. 00100001 or 2*4)");
         turingMachineInBinary = new Scanner(System.in).nextLine();
         if (turingMachineInBinary.contains("*")) {
             turingMachineInBinary = translate(turingMachineInBinary);
