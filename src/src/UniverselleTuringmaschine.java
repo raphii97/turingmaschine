@@ -18,7 +18,10 @@ public class UniverselleTuringmaschine {
     private void getTuringMachineInBinaryFormInput() {
         System.out.println("Enter a binary string: ");
         turingMachineInBinary = new Scanner(System.in).nextLine();
-        if (turingMachineInBinary.startsWith("1")) turingMachineInBinary = turingMachineInBinary.substring(1); //remove prefix 1
+        if (turingMachineInBinary.contains("*")) {
+            turingMachineInBinary = translate(turingMachineInBinary);
+        }
+        else if (turingMachineInBinary.startsWith("1")) turingMachineInBinary = turingMachineInBinary.substring(1); //remove prefix 1
     }
 
     /**
@@ -53,17 +56,11 @@ public class UniverselleTuringmaschine {
         //split user input into TM configuration and TM input
         String[] turingMachineAndInput = new String[2];
 
-        if (turingMachineInBinary.contains("*")){
+        if (turingMachineInBinary.contains("111")) {
+            turingMachineAndInput = turingMachineInBinary.split("111");
+        } else {
             turingMachineAndInput[0] = TURING_CODE;
-            turingMachineAndInput[1] = translate(turingMachineInBinary);
-        }
-        else{
-            if (turingMachineInBinary.contains("111")) {
-                turingMachineAndInput = turingMachineInBinary.split("111");
-            } else {
-                turingMachineAndInput[0] = TURING_CODE;
-                turingMachineAndInput[1] = turingMachineInBinary;
-            }
+            turingMachineAndInput[1] = turingMachineInBinary;
         }
 
         //fill band with Turing Machine input
