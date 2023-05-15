@@ -34,7 +34,13 @@ public class UTM {
      */
     private void convertInputToConfiguration() {
         //split user input into TM configuration and TM input
-        String[] code = input.split("111");
+        String[] code = new String[2];
+        if (input.contains("111")) {
+            code = input.split("111");
+        } else {
+            code[0] = "010100100001001101001000000010001001100101001010011001001000100100110001010000100001001100010010000001001011000010100001010011000010010000100100110000100010000010101100000101000001010110000010010000010010110000010000100010100110000001010000001010110000001001000000100101100000010000101000100110000000101000000010001001100000001001000000001000100";
+            code[1] = input;
+        }
 
         //fill band with TM input
         for (int i = 0; i < code[1].length(); i++) {
@@ -131,10 +137,11 @@ public class UTM {
         } while (!validateInput());
 
         convertInputToConfiguration();
-        print();
+        if (stepMode.getModus()) print();
 
         while (step(stepMode));
 
+        if (!stepMode.getModus()) print();
         System.out.println("Ergebnis: " + (Arrays.toString(band)).replaceAll("[^0]", "").length());
     }
 
@@ -161,7 +168,7 @@ public class UTM {
      * @param args default parameter
      */
     public static void main(String[] args) {
-        new UTM().start(Modus.STEP);
+        new UTM().start(Modus.LAUF);
     }
 
     /**
