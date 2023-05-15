@@ -174,7 +174,7 @@ public class UniverselleTuringmaschine {
      * @param args default parameter
      */
     public static void main(String[] args) {
-        new UniverselleTuringmaschine().start(Modus.STEP);
+        new UniverselleTuringmaschine().start(Modus.LAUF);
     }
 
     /**
